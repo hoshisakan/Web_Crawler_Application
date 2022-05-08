@@ -1,0 +1,134 @@
+version: '3.9'
+services:
+    nginx:
+        build: ./server/conf/nginx
+        container_name: web_nginx
+        env_file:
+            - ./.env
+        ports:
+            - 80:80
+            - 443:443
+            - 127.0.0.1:9001:9001
+        volumes:
+            - temporary:/backend/temporary
+            - ./server/web/frontend/dist/:/frontend/dist/
+            - ./server/web/backend/crawler/output/:/backend/crawler/output/
+            - ./server/web/backend/crawler/static/:/backend/crawler/static/
+            - ./server/conf/nginx/nginx.conf:/etc/nginx/nginx.conf
+            - ./server/conf/nginx/conf.d:/etc/nginx/conf.d
+            - ./server/logs/nginx/:/var/log/nginx
+            - ./server/web/certs/ssl/:/etc/nginx/ssl
+            - ./server/web/certs/data/.well-known/pki-validation/:/usr/share/nginx/html/letsencrypt/
+        user: root
+        networks:
+            - ${EXTERNAL_NETWORK:-demo}
+        depends_on:
+            - mariadb
+            - django
+        tty: true
+        restart: always
+
+    react:
+        build:
+            context: ./server/conf/react
+        container_name: web_frontend
+        env_file:
+            - ./.env
+        ports:
+            - 3000:3000
+        volumes:
+            - ./server/web/frontend/:/app/
+        networks:
+            - ${EXTERNAL_NETWORK:-demo}
+        tty: true
+        restart: always
+
+    rabbitmq:
+        build: ./server/conf/rabbitmq
+        container_name: web_rabbitmq
+        env_file:
+            - ./.env
+        ports:
+            - 5672:5672
+            - 8081:15672
+        volumes:
+            - ./server/data/rabbitmq/:/var/lib/rabbitmq/
+        environment:
+            - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER:-celery}
+            - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS:-passwd123}
+            - RABBITMQ_DEFAULT_VHOST=${RABBITMQ_DEFAULT_VHOST:-my_vhost}
+        networks:
+            - ${EXTERNAL_NETWORK:-demo}
+        tty: true
+        restart: always
+
+    redis:
+        image: redis
+        container_name: web_redis
+        env_file:
+            - ./.env
+        volumes:
+            - ./server/data/redis/:/data
+        networks:
+            - ${EXTERNAL_NETWORK:-demo}
+        ports:
+            - 6379:6379
+        command: redis-server --appendonly yes
+        restart: always
+
+    django:
+        build: ./server/conf/django
+        container_name: web_django
+        env_file:
+            - ./.env
+        volumes:
+            - temporary:/backend/temporary
+            - ./server/web/backend/:/backend/
+            - ./server/logs/django/:/var/log/uwsgi
+        networks:
+            - ${EXTERNAL_NETWORK:-demo}
+        depends_on:
+            - mariadb
+        command: ['bash', './product_run.sh']
+        tty: true
+        restart: always
+
+    mariadb:
+        build: ./server/conf/mariadb
+        container_name: web_mariadb
+        volumes:
+            - ./server/conf/mariadb/sqls:/docker-entrypoint-initdb.d/:rw
+            - ./server/conf/mariadb/my.cnf:/etc/mysql/my.cnf
+            - ./server/data/mariadb:/var/lib/mysql
+        environment:
+            - MYSQL_ROOT_USER=${MYSQL_ROOT_USER:-root}
+            - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-96783213428}
+            - MYSQL_USER=${MYSQL_USER:-hoshiyou}
+            - MYSQL_PASSWORD=${MYSQL_PASSWORD:-967832134}
+        ports:
+            - 3306:3306
+        networks:
+            - ${EXTERNAL_NETWORK:-demo}
+        restart: always
+
+    phpMyAdmin:
+        image: phpmyadmin/phpmyadmin
+        container_name: web_phpMyAdmin
+        env_file:
+            - ./.env
+        ports:
+            - 8080:80
+        environment:
+            - PMA_HOST=${MYSQL_HOST:-mysql}
+        depends_on:
+            - mariadb
+        networks:
+            - ${EXTERNAL_NETWORK:-demo}
+        restart: always
+
+volumes:
+    temporary:
+
+networks:
+    web_app:
+        external: true

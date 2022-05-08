@@ -1,0 +1,40 @@
+.root {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* background-color: rgb(39, 85, 172); */
+    background-image: url('../img/photo-1542176107-f50284e217c5.jpg');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.card-mt-1 {
+    margin-left: auto;
+    margin-right: auto;
+    width: 25rem;
+}
+
+.btn-mt-1 {
+    /* text-align: center; */
+    align-items: center;
+    justify-content: center;
+    margin-right: 0.35rem;
+    margin-top: 0.45rem;
+}
+
+.link-mt-1 {
+    align-items: center;
+    justify-content: center;
+}
+
+.field-error-remind {
+    margin-top: 0.25rem;
+
+    font-size: 16px;
+    color: red;
+    font-weight: bold;
+    text-align: right;
+}
