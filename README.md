@@ -1,6 +1,6 @@
 # Web_Crawler_Application
 ## 簡介
-### 透過 [React](https://zh-hant.reactjs.org/) + [Nginx](https://nginx.org/en/) + [Django](https://www.djangoproject.com/) + [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) + [Redis](https://redis.io/) + [Mariadb](https://mariadb.org/) + [Rabbitmq](https://www.rabbitmq.com/) 架設一個爬蟲網站，讓使用者同時撈取 Ptt 文章資訊、股票資料，並在網頁上查看，以及將其匯出至 csv 或 JSON 的檔案格式
+### 透過 [React](https://zh-hant.reactjs.org/) + [Nginx](https://nginx.org/en/) + [Django](https://www.djangoproject.com/) + [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) + [Redis](https://redis.io/) + [Mariadb](https://mariadb.org/) + [Rabbitmq](https://www.rabbitmq.com/) 架設一個爬蟲網站，讓使用者同時撈取 Ptt 文章資訊、股票資料，並在網頁上查看，以及將其匯出至 CSV 或 JSON 的檔案格式
 <br>
 
 ### 手機板介面
@@ -10,7 +10,7 @@
 ##### Ptt 文章搜尋結果
 ![alt text](https://imgur.com/o1oajyD.png)
 
-##### 功能選單 (查看, 匯出 csv 或 json, 刪除)
+##### 功能選單 (查看, 匯出 CSV 或 JSON 檔案, 刪除)
 ![alt text](https://imgur.com/nYnMdgc.png)
 
 ##### 查看 Ptt 文章搜尋結果
