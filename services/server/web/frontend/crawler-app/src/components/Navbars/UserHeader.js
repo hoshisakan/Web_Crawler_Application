@@ -52,20 +52,24 @@ export default function UserHeader(props) {
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="mr-auto" style={{ width: navComponentWidth }} onSelect={closeNavExpanded}>
                         <NavDropdown title="Guide" id="basic-nav-dropdown">
-                            <NavDropdown.Item eventKey="5" as={Link} to="/user/stock">
-                                Stock Info Search
+                            <NavDropdown.Item eventKey="5" as={Link} to="/user/google-search">
+                                Google 搜尋資訊
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item eventKey="6" as={Link} to="/user/ptt">
-                                Ptt Info Search
+                            <NavDropdown.Item eventKey="6" as={Link} to="/user/stock">
+                                股票資訊搜尋
+                            </NavDropdown.Item>
+                            <NavDropdown.Divider />
+                            <NavDropdown.Item eventKey="7" as={Link} to="/user/ptt">
+                                Ptt 文章搜尋
                             </NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="User" id="basic-nav-dropdown">
-                            <NavDropdown.Item eventKey="7" as={Link} to="/user/profile">
+                            <NavDropdown.Item eventKey="9" as={Link} to="/user/profile">
                                 Profile
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
-                            <NavDropdown.Item eventKey="8" as={Link} to="/session/logout">
+                            <NavDropdown.Item eventKey="10" as={Link} to="/session/logout">
                                 Logout
                             </NavDropdown.Item>
                         </NavDropdown>

@@ -18,21 +18,18 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 # from django.conf.urls.static import static
 # from django.conf import settings
-# from google_search.views import GoogleSearchNewsViewset, GoogleSearchVideoViewset, \
-#                                 GoogleSearchShoppingViewset, GoogleSearchViewset
+from google_search.views import GoogleSearchNewsViewset, GoogleSearchVideoViewset, \
+                            GoogleSearchViewset
 from stock.views import StockInfoViewset
-# from baseball.views import CPBLDailyRecordsViewset, BaseballSearchHistoryScoreViewset
 from ptt.views import PttBoardInfoViewset, PttArticlesInfoViewset
 from tasks.views import TasksResultViewset, ExtraTaskInfoViewset
 from users.views import UserViewset
 
 
 router = DefaultRouter(trailing_slash=False)
-# router.register(prefix=r'google-search/news', viewset=GoogleSearchNewsViewset, basename='access google search news info')
-# router.register(prefix=r'google-search/video', viewset=GoogleSearchVideoViewset, basename='access google search video info')
-# router.register(prefix=r'google-search/shopping', viewset=GoogleSearchShoppingViewset, basename='access google search shopping info')
+router.register(prefix=r'google-search/news', viewset=GoogleSearchNewsViewset, basename='access google search news info')
+router.register(prefix=r'google-search/video', viewset=GoogleSearchVideoViewset, basename='access google search video info')
 router.register(prefix=r'stock', viewset=StockInfoViewset, basename='access obtain stock info')
-# router.register(prefix=r'baseball/cpbl', viewset=CPBLDailyRecordsViewset, basename='access cpbl history score info')
 router.register(prefix=r'ptt/board', viewset=PttBoardInfoViewset, basename='access ptt board info')
 router.register(prefix=r'ptt/article', viewset=PttArticlesInfoViewset, basename='access ptt article info')
 router.register(prefix=r'tasks/base', viewset=TasksResultViewset, basename='access celery task result info')
@@ -44,6 +41,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
-    # path('api/google-search/obtain-info', GoogleSearchViewset.obtain_info_by_crawler , name='obtain google search info'),
-    # path('api/baseball/obtain-info', BaseballSearchHistoryScoreViewset.obtain_info_by_crawler , name='obtain baseball info'),
+    path('api/google-search/obtain-info', GoogleSearchViewset.obtain_info_by_crawler , name='obtain google search info'),
 ]

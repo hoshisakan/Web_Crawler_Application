@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'stock',
     'tasks',
     'ptt',
+    'google_search',
     'django_celery_results',
 ]
 

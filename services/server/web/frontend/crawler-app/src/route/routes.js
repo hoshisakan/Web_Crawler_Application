@@ -5,11 +5,19 @@ import RegisterPage from '../views/user/RegisterPage'
 import ApplyResetPasswordPage from '../views/user/ApplyResetPasswordPage'
 import ResetPasswordPage from '../views/user/ResetPasswordPage'
 import RegisterValidatePage from '../views/user/RegisterValidatePage'
+import GoogleSearchInfo from '../views/google_search/Search'
 import StcokSearch from '../views/stock/Search'
 import PttSearch from '../views/ptt/Search'
 
 
 export const UserRouter = [
+    {
+        path: '/google-search',
+        name: 'GoogleSearch',
+        icon: '',
+        component: GoogleSearchInfo,
+        path_prefix: '/user',
+    },
     {
         path: '/stock',
         name: 'Stock',
