@@ -232,7 +232,7 @@ class UserViewset(viewsets.ModelViewSet):
             return Response({'error': e.args[0], "allow_logout": True}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['POST'], detail=False, url_path='token-refresh')
-    def token_refresh(self, request):
+    def token_expire_check(self, request):
         try:
             self.serializer_class = RefreshTokenObtainSerializer
             data = request.data['refresh']
@@ -262,7 +262,6 @@ class UserViewset(viewsets.ModelViewSet):
             access_token = request.data.get('token', None)
             if access_token is None:
                 raise Exception("Token can't be empty")
-
             protect_auth = GenerateProtectAuthToken(salt='auth token')
             # logger.info(f'protect_auth: {protect_auth}')
             raw_access_token = protect_auth.descrypt_payload(access_token)
@@ -294,41 +293,6 @@ class UserViewset(viewsets.ModelViewSet):
             }
             logger.error(err_msg)
             return Response(err_msg, status=status.HTTP_400_BAD_REQUEST)
-
-    # @action(methods=['POST'], detail=False, url_path='token-expire-check')
-    # def token_expire_check(self, request):
-    #     try:
-    #         access_token = request.data.get('token', None)
-    #         if access_token is None:
-    #             raise Exception("Token can't be empty")
-    #         protect_auth = GenerateProtectAuthToken(salt='auth token')
-    #         raw_access_token = protect_auth.descrypt_payload(access_token)
-
-    #         decrypt_token = TokenBackend(algorithm='HS256').decode(raw_access_token, verify=False)
-    #         username = decrypt_token['user']
-    #         expires_in_timestamp = decrypt_token['exp']
-    #         expires_in_datetime = DT.convert_timestamp_to_datetime(expires_in_timestamp)
-    #         now_datetime = DT.get_current_datetime()
-    #         token_time_left = int((expires_in_datetime - now_datetime).total_seconds())
-
-    #         if cache.get(username, False) is False:
-    #             raise Exception("Invalid token or expired or will expire")
-    #         self.serializer_class = TokenVerifyObtainSerializer
-    #         serializer = self.get_serializer(data={"token": raw_access_token})
-    #         serializer.is_valid(raise_exception=True)
-    #         validated_data = serializer.validated_data
-    #         validated_data['message'] = "Token is valid"
-    #         validated_data['is_valid'] = True
-    #         validated_data['token_time_left'] = token_time_left
-    #         return Response(validated_data, status=status.HTTP_200_OK)
-    #     except Exception as e:
-    #         err_msg = {
-    #             "error": e.args[0],
-    #             "is_invalid": False,
-    #             "token_time_left": token_time_left
-    #         }
-    #         logger.error(err_msg)
-    #         return Response(err_msg, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['GET'], detail=False, url_path='profile')
     def obtain_user_profile(self, request, *args, **kwargs):
