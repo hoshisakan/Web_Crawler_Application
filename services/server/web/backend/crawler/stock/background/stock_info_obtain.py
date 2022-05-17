@@ -106,8 +106,8 @@ class StockInfoObtain():
         for date, open_price, high_price, low_price, close_price, adjclose_price, volume in zip(
             rows[0], rows[1], rows[2], rows[3], rows[4], rows[5], rows[6],
         ):
-            date = DT.convert_timestamp_to_datetime(date) if date else '1990-01-01'
-            # logger.warning([date, open_price, high_price, low_price, close_price, adjclose_price, volume])
+            date = DT.convert_timestamp_to_date(date) if date else '1990-01-01'
+            logger.warning([date, open_price, high_price, low_price, close_price, adjclose_price, volume])
             open_price = 0 if open_price is None or self.__check_nan_exists(str(open_price)) != -1 else self.__round_down(open_price)
             high_price = 0 if high_price is None or self.__check_nan_exists(str(high_price)) != -1 else self.__round_down(high_price)
             low_price = 0 if low_price is None or self.__check_nan_exists(str(low_price)) != -1 else self.__round_down(low_price)

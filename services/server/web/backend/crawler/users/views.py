@@ -1,3 +1,4 @@
+from loguru import logger
 from rest_framework.exceptions import ValidationError
 from .serializers import LoginTokenObtainSerializer, RefreshTokenObtainSerializer, \
                         IdUsernameSerializer, UsernameSerializer, UserIdSerializer, \
@@ -22,8 +23,10 @@ from .validate_tokens import GenerateSerializerToken, GenerateProtectAuthToken
 from django.core.cache import cache
 from module.date import DateTimeTools as DT
 from django.conf import settings
-# from module.handle_exception import HandleException
+from module.handle_exception import HandleException
+from module.log_generate import Loggings
 
+logger = Loggings()
 
 class UserViewset(viewsets.ModelViewSet):
     queryset = User.objects.all()
@@ -172,7 +175,7 @@ class UserViewset(viewsets.ModelViewSet):
         except SignatureExpired as signature_expired:
             return Response({'error': 'Token Expired', 'is_password_changed':False, 'detail': signature_expired.args[0]}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print('message: {}'.format(e))
+            logger.error('message: {}'.format(e))
             return Response({'error': e.args[0], 'is_password_changed':False}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['POST'], detail=False, url_path='sign-in')
@@ -247,24 +250,31 @@ class UserViewset(viewsets.ModelViewSet):
             }
             return Response(generate_token, status=status.HTTP_200_OK)
         except TokenError as tr:
+            logger.error({"error": tr.args[0]})
             raise InvalidToken(tr.args[0])
         except Exception as e:
+            logger.error({"error": e.args[0]})
             return Response({"error": e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
-
+    
     @action(methods=['POST'], detail=False, url_path='token-expire-check')
-    def token_expire_check(self, request):
+    def token_refresh(self, request):
         try:
             access_token = request.data.get('token', None)
             if access_token is None:
                 raise Exception("Token can't be empty")
-            protect_auth = GenerateProtectAuthToken(salt='auth token')
-            raw_access_token = protect_auth.descrypt_payload(access_token)
 
+            protect_auth = GenerateProtectAuthToken(salt='auth token')
+            # logger.info(f'protect_auth: {protect_auth}')
+            raw_access_token = protect_auth.descrypt_payload(access_token)
+            # logger.info(f'raw_access_token: {raw_access_token}')
             decrypt_token = TokenBackend(algorithm='HS256').decode(raw_access_token, verify=False)
             username = decrypt_token['user']
             expires_in_timestamp = decrypt_token['exp']
+            logger.info(f'expires_in_timestamp: {expires_in_timestamp}')
             expires_in_datetime = DT.convert_timestamp_to_datetime(expires_in_timestamp)
+            logger.info(f'expires_in_datetime: {expires_in_datetime}')
             now_datetime = DT.get_current_datetime()
+            logger.info(f'now_datetime: {now_datetime}')
             token_time_left = int((expires_in_datetime - now_datetime).total_seconds())
 
             if cache.get(username, False) is False:
@@ -279,11 +289,46 @@ class UserViewset(viewsets.ModelViewSet):
             return Response(validated_data, status=status.HTTP_200_OK)
         except Exception as e:
             err_msg = {
-                "error": e.args[0],
+                "error": HandleException.show_exp_detail_message(e),
                 "is_invalid": False,
-                "token_time_left": token_time_left
             }
+            logger.error(err_msg)
             return Response(err_msg, status=status.HTTP_400_BAD_REQUEST)
+
+    # @action(methods=['POST'], detail=False, url_path='token-expire-check')
+    # def token_expire_check(self, request):
+    #     try:
+    #         access_token = request.data.get('token', None)
+    #         if access_token is None:
+    #             raise Exception("Token can't be empty")
+    #         protect_auth = GenerateProtectAuthToken(salt='auth token')
+    #         raw_access_token = protect_auth.descrypt_payload(access_token)
+
+    #         decrypt_token = TokenBackend(algorithm='HS256').decode(raw_access_token, verify=False)
+    #         username = decrypt_token['user']
+    #         expires_in_timestamp = decrypt_token['exp']
+    #         expires_in_datetime = DT.convert_timestamp_to_datetime(expires_in_timestamp)
+    #         now_datetime = DT.get_current_datetime()
+    #         token_time_left = int((expires_in_datetime - now_datetime).total_seconds())
+
+    #         if cache.get(username, False) is False:
+    #             raise Exception("Invalid token or expired or will expire")
+    #         self.serializer_class = TokenVerifyObtainSerializer
+    #         serializer = self.get_serializer(data={"token": raw_access_token})
+    #         serializer.is_valid(raise_exception=True)
+    #         validated_data = serializer.validated_data
+    #         validated_data['message'] = "Token is valid"
+    #         validated_data['is_valid'] = True
+    #         validated_data['token_time_left'] = token_time_left
+    #         return Response(validated_data, status=status.HTTP_200_OK)
+    #     except Exception as e:
+    #         err_msg = {
+    #             "error": e.args[0],
+    #             "is_invalid": False,
+    #             "token_time_left": token_time_left
+    #         }
+    #         logger.error(err_msg)
+    #         return Response(err_msg, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['GET'], detail=False, url_path='profile')
     def obtain_user_profile(self, request, *args, **kwargs):
@@ -320,19 +365,19 @@ class UserViewset(viewsets.ModelViewSet):
             if self.viewset_func.checkAccountActivateStatus(user_id=user_id):
                 raise Exception("The account has been activated")
             activate_result = self.viewset_func.changeAccountActivateStatus(user_id=user_id, activate_status=True)
-            print(f"{user_id} of {activate_result}")
+            logger.info(f"{user_id} of {activate_result}")
             if activate_result != 1:
-                print(f"{user_id} of {activate_result} ,The account activate failed")
+                logger.info(f"{user_id} of {activate_result} ,The account activate failed")
                 raise Exception(f"{user_id} of {activate_result} ,The account activate failed")
             return Response({'message': 'Test Successful!', 'is_account_validated': True}, status=status.HTTP_200_OK)
         except BadSignature as bad_signature:
-            print(bad_signature.args[0])
+            logger.error(bad_signature.args[0])
             return Response({'error': 'Invalid Acticate Token' , 'is_account_validated':False, 'detail': bad_signature.args[0]}, status=status.HTTP_400_BAD_REQUEST)
         except SignatureExpired as signature_expired:
-            print(signature_expired.args[0])
+            logger.error(signature_expired.args[0])
             return Response({'error': 'Token Expired', 'is_account_validated':False, 'detail': signature_expired.args[0]}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
-            print(e.args[0])
+            logger.error(e.args[0])
             return Response({'error': e.args[0], 'is_account_validated':False}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['POST'], detail=False, url_path='forget-password')

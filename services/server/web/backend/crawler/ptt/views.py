@@ -82,14 +82,6 @@ class PttBoardInfoViewset(viewsets.ModelViewSet):
         try:
             self.serializer_class = ColumnsPttBoardInfoSerializer
             serializer = self.get_serializer(self.queryset, many=True)
-            # data = serializer.data
-            # result = []
-            # for read in data:
-            #     temp = {}
-            #     temp['id'] = read['name']
-            #     temp['value'] = read['name']
-            #     result.append(temp)
-
             return Response(serializer.data, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e.args[0])}, status=status.HTTP_403_FORBIDDEN)

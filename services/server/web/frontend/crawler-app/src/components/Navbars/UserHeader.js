@@ -61,7 +61,7 @@ export default function UserHeader(props) {
                             </NavDropdown.Item>
                             <NavDropdown.Divider />
                             <NavDropdown.Item eventKey="7" as={Link} to="/user/ptt">
-                                Ptt 文章搜尋
+                                Ptt 熱門看板文章搜尋
                             </NavDropdown.Item>
                         </NavDropdown>
                         <NavDropdown title="User" id="basic-nav-dropdown">

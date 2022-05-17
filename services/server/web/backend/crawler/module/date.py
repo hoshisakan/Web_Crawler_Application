@@ -87,8 +87,7 @@ class DateTimeTools():
         return dt.fromisoformat(str_date)
     
     @staticmethod
-    def convert_timestamp_to_datetime(timestamp):
-        # return dt.fromtimestamp(timestamp).strftime('%Y-%m-%d %H:%M:%S')
+    def convert_timestamp_to_date(timestamp):
         return dt.fromtimestamp(timestamp).strftime('%Y-%m-%d')
 
     @staticmethod
