@@ -47,12 +47,24 @@ Open Price
 Volume
 ![alt text](https://imgur.com/ZEkie2L.png)
 
-### Ptt 爬蟲從 [Ptt](https://www.ptt.cc/bbs/index.html) 撈取各大熱門板的文章資料
+### Ptt 爬蟲從 [Ptt](https://www.ptt.cc/bbs/index.html) 擷取各大熱門板的文章資料
 
 ![alt](https://imgur.com/T7KviqB.png)
 ![alt](https://imgur.com/JP85C3A.png)
 ![alt](https://imgur.com/DfWxXbN.png)
 ![alt](https://imgur.com/Yybtkpe.png)
+
+### 擷取 Google News 與 Google Video 的搜尋結果
+
+![alt](https://imgur.com/cBOI8HK.png)
+
+#### Google News Search Result
+![alt](https://imgur.com/jNRTS7B.png)
+![alt](https://imgur.com/LMOuriD.png)
+
+#### Google Video Search Result
+![alt](https://imgur.com/UlQjcgg.png)
+![alt](https://imgur.com/28zf6MS.png)
 
 ## 有興趣的人，可以至下方的連結，用 demo 這組帳號登入測試
 >> 此帳號僅供測試網路爬蟲抓取 Ptt 文章資訊與股票資料使用，用戶忘記密碼的功能，請自行註冊一組帳號測試
