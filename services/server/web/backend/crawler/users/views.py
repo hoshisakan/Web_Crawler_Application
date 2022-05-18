@@ -232,7 +232,7 @@ class UserViewset(viewsets.ModelViewSet):
             return Response({'error': e.args[0], "allow_logout": True}, status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['POST'], detail=False, url_path='token-refresh')
-    def token_expire_check(self, request):
+    def token_refresh(self, request):
         try:
             self.serializer_class = RefreshTokenObtainSerializer
             data = request.data['refresh']
@@ -257,7 +257,7 @@ class UserViewset(viewsets.ModelViewSet):
             return Response({"error": e.args[0]}, status=status.HTTP_400_BAD_REQUEST)
     
     @action(methods=['POST'], detail=False, url_path='token-expire-check')
-    def token_refresh(self, request):
+    def token_expire_check(self, request):
         try:
             access_token = request.data.get('token', None)
             if access_token is None:
