@@ -135,7 +135,7 @@ export default function RegisterPage(props) {
                                             <hr />
                                             <div className="btn-mt-1">
                                                 <Button variant="primary" onClick={handleReissueRequest}>
-                                                    未收到認證信?
+                                                    Didn't receive the verification email?
                                                 </Button>
                                             </div>
                                         </Alert>
@@ -195,13 +195,13 @@ export default function RegisterPage(props) {
                                         disabled={checkSubmitValues()}
                                         size="sm"
                                     >
-                                        Sign up
+                                        Register
                                     </Button>
                                 </div>
                             </Card.Body>
                             <Card.Footer>
                                 <div style={{ textAlign: 'center' }}>
-                                    Already have account? <Link to="/session/login">Sign in</Link>
+                                    Already have an account? <Link to="/session/login">Sign in</Link>
                                 </div>
                             </Card.Footer>
                         </Form>

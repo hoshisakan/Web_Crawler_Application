@@ -26,7 +26,7 @@ class TasksResultViewset(viewsets.ModelViewSet):
     extra_task_views_func = ExtraTaskViewsFunc(ExtraTaskInfo)
 
     def get_permissions(self):
-        if self.action in ('list', 'retrieve', 'destroy', 'update'):
+        if self.action in ('list', 'retrieve', 'destroy', 'update', 'partial_update'):
             permission_classes = [IsAdminUser]
         else:
             permission_classes = [IsAuthenticated]
@@ -153,7 +153,7 @@ class ExtraTaskInfoViewset(viewsets.ModelViewSet):
     views_func = ExtraTaskViewsFunc(ExtraTaskInfo)
 
     def get_permissions(self):
-        if self.action in ('retrieve', 'destroy', 'update'):
+        if self.action in ('retrieve', 'destroy', 'update', 'partial_update'):
             permission_classes = [IsAdminUser]
         else:
             permission_classes = []

@@ -79,14 +79,14 @@ export default function RegisterValidatePage() {
             <Row>
                 {validateFailure ? (
                     <Alert variant="danger">
-                        <Alert.Heading>Register Account Activate Failed</Alert.Heading>
+                        <Alert.Heading>Validate User Account Failed</Alert.Heading>
                         <div className="alert-text-1">
                             <p>{failureAlertMsg}</p>
                         </div>
                         <hr />
                         <div className="d-flex justify-content-end">
                             <Button variant="danger" onClick={handleLoginRedirect}>
-                                Return to sign in
+                                Return login page
                             </Button>
                         </div>
                     </Alert>

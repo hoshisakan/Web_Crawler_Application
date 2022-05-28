@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { Form, Button, Row, Col, Card, Container, Alert } from 'react-bootstrap'
 import { apiApplyResetPassword } from '../../api.js'
+import useInterval from '../../components/Timer/useInterval'
+import { useHistory } from 'react-router-dom'
 
 export default function ApplyResetPasswordPage(props) {
     const currentWindowSize = props.currentWindowSize === undefined ? '28rem' : props.currentWindowSize
@@ -8,6 +10,16 @@ export default function ApplyResetPasswordPage(props) {
     const [applySuccess, setApplySuccess] = useState(false)
     const [applyFailure, setApplyFailure] = useState(false)
     const [cardWidth, setCardWidth] = useState('28rem')
+    const history = useHistory()
+    const [delay] = useState(1000)
+    const [countdown, setCountdown] = useState(5)
+
+    useInterval(
+        () => {
+            countdown === 0 ? history.push('/session/login') : setCountdown(countdown - 1)
+        },
+        applySuccess ? delay : null
+    )
 
     const handleEmailChange = (e) => {
         setEmail(e.target.value)
@@ -56,18 +68,16 @@ export default function ApplyResetPasswordPage(props) {
                             <Card.Body>
                                 {applySuccess ? (
                                     <Alert variant="success">
-                                        <Alert.Heading>Apply Success</Alert.Heading>
+                                        <Alert.Heading>Apply Successfully</Alert.Heading>
                                         <p className="mb-0">
-                                            Please go to your mailbox to receive the reset password email
+                                            Please go to your mailbox to receive the reset password email, will be jump to sign page: {countdown}
                                         </p>
                                     </Alert>
                                 ) : null}
                                 {applyFailure ? (
                                     <Alert variant="danger">
                                         <Alert.Heading>Apply Failed</Alert.Heading>
-                                        <p className="mb-0">
-                                            Please check field whether or enter duplicate username or email
-                                        </p>
+                                        <p className="mb-0">Please check the email is correct!</p>
                                     </Alert>
                                 ) : null}
                                 <Form.Group controlId="formEmail" className="align-items-left-2">
@@ -88,7 +98,7 @@ export default function ApplyResetPasswordPage(props) {
                                         onClick={handleApplySubmit}
                                         disabled={validateForm()}
                                     >
-                                        Apply Reset Password
+                                        Submit
                                     </Button>
                                 </div>
                             </Card.Footer>

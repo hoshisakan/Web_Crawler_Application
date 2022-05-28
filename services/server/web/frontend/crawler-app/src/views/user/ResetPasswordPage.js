@@ -132,7 +132,7 @@ export default function RegisterPage(props) {
                                         onClick={handleResetPasswordSubmit}
                                         disabled={checkSubmitValues()}
                                     >
-                                        Reset Password
+                                        Confirm Reset Password
                                     </Button>
                                 </div>
                             </Card.Footer>

@@ -35,7 +35,7 @@ class UserViewset(viewsets.ModelViewSet):
     viewset_func = UserViewsFunc(User)
 
     def get_permissions(self):
-        if self.action in ('list', 'destroy'):
+        if self.action in ('list', 'destroy', 'update', 'partial_update'):
             permission_classes = [IsAdminUser]
         else:
             permission_classes = []
@@ -89,7 +89,7 @@ class UserViewset(viewsets.ModelViewSet):
             link = f"{settings.SERVER_BASE_URL}/session/confirm-account?token={token}"
             # send register account activate email
             task_id = chain_tasks_send_email(
-                subject='[Crawler Website] Activate Register Account',
+                subject='[Crawler Website] 啟用註冊帳戶',
                 username=username,
                 template='register_user.html',
                 link=link,
@@ -172,8 +172,6 @@ class UserViewset(viewsets.ModelViewSet):
             return Response({'message': 'Change Password Successful.', 'is_password_changed': True}, status=status.HTTP_200_OK)
         except BadSignature as bad_signature:
             return Response({'error': 'Invalid Reset Token' , 'is_password_changed':False, 'detail': bad_signature.args[0]}, status=status.HTTP_400_BAD_REQUEST)
-        except SignatureExpired as signature_expired:
-            return Response({'error': 'Token Expired', 'is_password_changed':False, 'detail': signature_expired.args[0]}, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             logger.error('message: {}'.format(e))
             return Response({'error': e.args[0], 'is_password_changed':False}, status=status.HTTP_400_BAD_REQUEST)
@@ -367,9 +365,9 @@ class UserViewset(viewsets.ModelViewSet):
                 token = serializer_items.encrypt_payload(encrypt_payload)
                 link = f"{settings.SERVER_BASE_URL}/session/reset-password?token={token}"
                 task_id = chain_tasks_send_email(
-                    subject='[Crawler Website] Reset Password Request',
+                    subject='[Crawler Website] 重置密碼',
                     username=username,
-                    template='register_user.html',
+                    template='reset_password.html',
                     link=link,
                     to=[email]
                 )
