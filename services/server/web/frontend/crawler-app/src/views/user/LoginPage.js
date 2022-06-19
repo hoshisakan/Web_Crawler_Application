@@ -63,8 +63,8 @@ export default function LoginPage(props) {
     }
 
     const handleFormInputArray = (e) => {
-        const { name, value } = e.target
-        const temp = [...formInputArray]
+        let { name, value } = e.target
+        let temp = [...formInputArray]
         temp[0][name] = value
         setFormInputArray(temp)
     }

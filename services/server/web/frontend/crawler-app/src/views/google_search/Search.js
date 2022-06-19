@@ -63,9 +63,9 @@ export default function Search(props) {
     }
 
     const handleFormInputArray = (e) => {
-        const { name, value } = e.target
+        let { name, value } = e.target
         // console.log(name, value)
-        const tempList = [...formInputArray]
+        let tempList = [...formInputArray]
         if (name === 'data_type' && value === 'None') {
             tempList[0][name] = ''
         } else {

@@ -65,8 +65,8 @@ export default function Search(props) {
     }
 
     const handleFormInputArray = (e) => {
-        const { name, value } = e.target
-        const tempList = [...formInputArray]
+        let { name, value } = e.target
+        let tempList = [...formInputArray]
         if (
             (name === 'search_page_count' || name === 'action_mode' || name === 'search_page_limit_enable') &&
             value === 'None'
@@ -81,7 +81,7 @@ export default function Search(props) {
             tempList[0]['search_page_count'] = 0
             tempList[0][name] = value
         } else if (name === 'search_page_limit_enable' && value !== 'None') {
-            const tempValue = JSON.parse(value)
+            let tempValue = JSON.parse(value)
             if (!tempValue) {
                 tempList[0]['search_page_count'] = 0
             }

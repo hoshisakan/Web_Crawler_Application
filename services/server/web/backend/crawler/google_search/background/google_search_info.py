@@ -131,40 +131,40 @@ class GoogleSearchInfo():
 
                 with AnalysisData(page_source, 'html.parser') as soup:
                     search_div_tag = soup.find('div', {'id': 'search'})
-                    if page_count > 0 and search_div_tag is not None:
-                        news_all_g_card_element = search_div_tag.find_all('g-card')
+                    news_main_div_tag = search_div_tag.find('div', {'class': 'v7W49e'}) if page_count > 0 and search_div_tag is not None or not search_div_tag else None
+                    if news_main_div_tag is None:
+                        raise Exception('Not found any match news div tag')
                     else:
-                        raise Exception('No hot news div tag found')
-                    #TODO 迭代獲取當前頁面的每一筆新聞資訊
-                    for current_page_news_count, current_g_card_element in enumerate(news_all_g_card_element, 1):
-                        #TODO 獲取當前第 n 筆的新聞資訊
-                        one_of_card_div_tag = current_g_card_element.find('div', {'class': 'iRPxbe'})
-                        if one_of_card_div_tag is not None:
-                            #TODO 獲取新聞社名稱
-                            newspaper_div_tag = one_of_card_div_tag.find('div', {'class': 'CEMjEf NUnG9d'})
-                            newspaper = newspaper_div_tag.get_text().strip().replace('\n', '') if newspaper_div_tag is not None else ''
-                            #TODO 獲取標題名稱
-                            title_div_tag = one_of_card_div_tag.find('div', { 'class', 'mCBkyc y355M JQe2Ld nDgy9d' })
-                            title = title_div_tag.get_text().strip().replace('\n', '') if title_div_tag is not None else ''
-                            #TODO 獲取簡介內容
-                            summary_div_tag = one_of_card_div_tag.find('div', { 'class': 'GI74Re nDgy9d' })
-                            summary = summary_div_tag.get_text().strip().replace('\n', '') if summary_div_tag is not None else ''
-                            #TODO 獲取新聞資訊更新的時間
-                            update_time_div_tag = one_of_card_div_tag.find('div', { 'class': 'OSrXXb ZE0LJd' })
-                            update_time = update_time_div_tag.find('span').get_text().strip()
-                            
-                            #TODO 獲取資訊連結
-                            link_a_tag = current_g_card_element.find('a')
-                            link = link_a_tag['href'] if link_a_tag is not None else ''
-                            temp_list = [self.__auth_user, self.__task_id, self.__keyword, title, summary, update_time, link, newspaper, page_count]
+                        #TODO 迭代獲取當前頁面的每一筆新聞資訊
+                        for current_page_news_count, current_g_card_element in enumerate(news_main_div_tag, 1):
+                            #TODO 獲取當前第 n 筆的新聞資訊
+                            one_of_card_div_tag = current_g_card_element.find('div', {'class': 'iRPxbe'})
+                            if one_of_card_div_tag is not None:
+                                #TODO 獲取新聞社名稱
+                                newspaper_div_tag = one_of_card_div_tag.find('div', {'class': 'CEMjEf NUnG9d'})
+                                newspaper = newspaper_div_tag.get_text().strip().replace('\n', '') if newspaper_div_tag is not None else ''
+                                #TODO 獲取標題名稱
+                                title_div_tag = one_of_card_div_tag.find('div', { 'class', 'mCBkyc y355M ynAwRc MBeuO nDgy9d' })
+                                title = title_div_tag.get_text().strip().replace('\n', '') if title_div_tag is not None else ''
+                                #TODO 獲取簡介內容
+                                summary_div_tag = one_of_card_div_tag.find('div', { 'class': 'GI74Re nDgy9d' })
+                                summary = summary_div_tag.get_text().strip().replace('\n', '') if summary_div_tag is not None else ''
+                                #TODO 獲取新聞資訊更新的時間
+                                update_time_div_tag = one_of_card_div_tag.find('div', { 'class': 'OSrXXb ZE0LJd' })
+                                update_time = update_time_div_tag.find('span').get_text().strip()
+                                
+                                #TODO 獲取資訊連結
+                                link_a_tag = current_g_card_element.find('a')
+                                link = link_a_tag['href'] if link_a_tag is not None else ''
+                                temp_list = [self.__auth_user, self.__task_id, self.__keyword, title, summary, update_time, link, newspaper, page_count]
 
-                            if any(temp_list) is True:
-                                current_info_dict.append(dict(zip(info_columns, temp_list)))
-                            else:
-                                logger.error(f'Found empty in current page {page_count} the {current_page_news_count} data')
-                            if not newspaper and not title and not summary and not update_time and not link:
-                                raise Exception(f"Data catch empty\n{current_info_dict}")
-                info.extend(list({v['title']:v for v in current_info_dict}.values()))
+                                if any(temp_list) is True:
+                                    current_info_dict.append(dict(zip(info_columns, temp_list)))
+                                else:
+                                    logger.error(f'Found empty in current page {page_count} the {current_page_news_count} data')
+                                if not newspaper and not title and not summary and not update_time and not link:
+                                    raise Exception(f"Data catch empty\n{current_info_dict}")
+                    info.extend(list({v['title']:v for v in current_info_dict}.values()))
             result['json_rows'] = info
             logger.info("Finish get google search news information from page source")
         except Exception as e:

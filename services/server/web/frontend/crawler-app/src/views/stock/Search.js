@@ -74,8 +74,8 @@ export default function Search(props) {
     }
 
     const handleFormInputArray = (e, index) => {
-        const { name, value } = e.target
-        const tempList = [...formInputArray]
+        let { name, value } = e.target
+        let tempList = [...formInputArray]
         if (name === 'country' && value === 'None') {
             tempList[index][name] = ''
         } else {
@@ -86,7 +86,7 @@ export default function Search(props) {
 
     // handle click event of the Remove button
     const handleRemoveClick = (index) => {
-        const list = [...formInputArray]
+        let list = [...formInputArray]
         list.splice(index, 1)
         setFormInputArray(list)
         if (formInputArray.length === 1) {
@@ -109,7 +109,7 @@ export default function Search(props) {
 
     // handle mobile click event of the Remove button
     const handleMobileRemoveClick = () => {
-        const list = [...formInputArray]
+        let list = [...formInputArray]
         list.splice(mobileInputCurrentIndex, 1)
         setFormInputArray(list)
         if (list.length === 1) {
