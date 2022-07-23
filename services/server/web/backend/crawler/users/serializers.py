@@ -9,9 +9,10 @@ from rest_framework_simplejwt.tokens import RefreshToken, UntypedToken
 from django.contrib.auth.models import User
 from .views_func import UserViewsFunc
 from rest_framework_simplejwt.backends import TokenBackend
+from crawler.config import SERVER_CONFIG
 
-SUPERUSER_LIFETIME = DT.obtain_minutes_datetime(1)
-RESEST_NORMALUSER_LIFETIME = DT.obtain_minutes_datetime(5)
+SUPERUSER_LIFETIME = SERVER_CONFIG.JWT_TOKEN_SETTING['SUPERUSER_LIFETIME']
+RESEST_NORMALUSER_LIFETIME = SERVER_CONFIG.JWT_TOKEN_SETTING['RESEST_NORMALUSER_LIFETIME']
 
 
 class LoginUserSerializer(serializers.ModelSerializer):
@@ -94,7 +95,9 @@ class LoginTokenObtainSerializer(TokenObtainPairSerializer):
             data['exp'] = DT.format_datetime_str(DT.get_current_datetime() + SUPERUSER_LIFETIME)
         else:
             data['access'] = text_type(refresh.access_token)
-            data['exp'] = DT.format_datetime_str(DT.get_current_datetime() + refresh.access_token.lifetime)
+            # data['exp'] = DT.format_datetime_str(DT.get_current_datetime() + refresh.access_token.lifetime)
+            data['exp'] = str(DT.get_current_datetime() + RESEST_NORMALUSER_LIFETIME)
+            print(f'User token expire time is: {refresh.access_token.lifetime}')
         if api_settings.UPDATE_LAST_LOGIN:
             update_last_login(None, self.user)
         return data

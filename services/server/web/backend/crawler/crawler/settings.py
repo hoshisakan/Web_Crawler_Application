@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from pathlib import Path
 import os
 from .config import SERVER_CONFIG, EMAIL_BACKEND_CONFIG
-from module.date import DateTimeTools as DT
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -179,8 +178,8 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': DT.obtain_minutes_datetime(SERVER_CONFIG.JWT_TOKEN_SETTING['ACCESS_TOKEN_LIFETIME']),
-    'REFRESH_TOKEN_LIFETIME': DT.obtain_days_datetime(SERVER_CONFIG.JWT_TOKEN_SETTING['REFRESH_TOKEN_LIFETIME']),
+    'ACCESS_TOKEN_LIFETIME': SERVER_CONFIG.JWT_TOKEN_SETTING['ACCESS_TOKEN_LIFETIME'],
+    'REFRESH_TOKEN_LIFETIME': SERVER_CONFIG.JWT_TOKEN_SETTING['REFRESH_TOKEN_LIFETIME'],
     'SIGNING_KEY': SECRET_KEY,
     # 'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
     'USER_ID_FIELD': 'id',
