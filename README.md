@@ -66,24 +66,6 @@ Volume
 ![alt](https://imgur.com/UlQjcgg.png)
 ![alt](https://imgur.com/28zf6MS.png)
 
-## 有興趣的人，可以至下方的連結，用 demo 這組帳號登入測試
->> 此帳號僅供測試網路爬蟲抓取 Ptt 文章資訊與股票資料使用，用戶忘記密碼的功能，請自行註冊一組帳號測試
-
-### 測試帳號 && 密碼
-[Demo](https://hoshi-crawler.serveirc.com/)
-```
-    account: demo
-    password: Demo21739865
-```
-
-### 帳號註冊
-
-[Register Account](https://hoshi-crawler.serveirc.com/session/register)
-
-![alt](https://imgur.com/1C9lF3K.png)
-
-
-
 # 執行環境
 * Linux
 * Ubuntu 20.04
