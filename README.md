@@ -1,6 +1,6 @@
 # Web_Crawler_Application
 ## 簡介
-### 透過 [React](https://zh-hant.reactjs.org/) + [Nginx](https://nginx.org/en/) + [Django](https://www.djangoproject.com/) + [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) + [Redis](https://redis.io/) + [Mariadb](https://mariadb.org/) + [Rabbitmq](https://www.rabbitmq.com/) 架設一個爬蟲網站，讓使用者同時撈取 Ptt 文章資訊、股票資料，並在網頁上查看，以及將其匯出至 CSV 或 JSON 的檔案格式
+### 透過 [React](https://zh-hant.reactjs.org/) + [Nginx](https://nginx.org/en/) + [Django](https://www.djangoproject.com/) + [uWSGI](https://uwsgi-docs.readthedocs.io/en/latest/) + [Redis](https://redis.io/) + [Mariadb](https://mariadb.org/) + [RabbitMQ](https://www.rabbitmq.com/) 架設一個爬蟲網站，讓使用者同時撈取 Ptt 文章資訊、股票資料，並在網頁上查看，以及將其匯出至 CSV 或 JSON 的檔案格式
 <br>
 
 ### 手機板介面
